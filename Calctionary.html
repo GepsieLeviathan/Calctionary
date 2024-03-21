@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Dictionary</h1>
+    
+    <input type="text" id="wordInput" placeholder="Enter a word">
+    <button onclick="searchDefinition()">Search</button>
+
+    <div id="definitions"></div>
+
+    <script>
+        function searchDefinition() {
+            var apiKey = 'YOUR_API_KEY';
+            var word = $('#wordInput').val();
+
+            $.ajax({
+                url: 'https://api.wordnik.com/v4/word.json/' + word + '/definitions',
+                type: 'GET',
+                data: {
+                    api_key: apiKey,
+                    limit: 1 // Limit to one definition
+                },
+                success: function(data) {
+                    if (data.length > 0) {
+                        var definition = data[0].text;
+                        $('#definitions').html('<p><strong>' + word + ':</strong> ' + definition + '</p>');
+                    } else {
+                        $('#definitions').html('<p>No definition found for ' + word + '</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
